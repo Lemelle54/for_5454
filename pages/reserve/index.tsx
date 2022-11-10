@@ -1,9 +1,10 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
-import { useState } from 'react'
+import React, { useEffect, useState } from "react"
+import ImageMap from 'image-map'
+import Image from "next/image"
+import classes from './index.module.css'
+import StreetAdress from "../../lib/streetCoordinate/coordinate"
 
-const DUMMY = `<area target="" alt="" title="" href="" coords="247,157,323,225,321,154,252,223" shape="poly" />
+const DUMMY = `    <area target="" alt="" title="" href="" coords="247,157,323,225,321,154,252,223" shape="poly" />
 <area target="" alt="" title="" href="" coords="58,197,116,142,188,214,125,272" shape="poly" />
 <area target="" alt="" title="" href="" coords="205,275,254,273,254,323,202,323" shape="poly" />
 <area target="" alt="" title="" href="" coords="204,370,273,371,273,440,202,441" shape="poly" />
@@ -34,29 +35,52 @@ const DUMMY = `<area target="" alt="" title="" href="" coords="247,157,323,225,3
 <area target="" alt="" title="" href="" coords="863,542,863,615,934,613,935,543" shape="poly" />
 <area target="" alt="" title="" href="" coords="721,651,785,614,819,676,758,713" shape="poly" />`
 
-export default function ReservePage() {
 
-      // 문자열을 배열로 일단 만든다
-      const result = DUMMY.split(" />");
+export default function reservePage() {
+    const [name, setName] = useState<string>('');
+    const [extend, setExtend] = useState<string>('');
+    useEffect(() => {
+ImageMap('img[usemap]')
+    }, [])
 
-  //문자열로 만든 배열을 좌표 배열로 다듬기
-  const coordinate = result.map(item => 
-    item.slice(49, -14)
-  );
-  console.log(coordinate);
+    function onChangeHandler (e: React.ChangeEvent<HTMLElement>) {
+        console.log(e.target.value)
+        setName(e.target.value)
+    }
 
-  // 좌표 배열로 다듬은 배열을 다시 map으로 쓸 수 있게 다듬기
-  
+    // 확장 비확장
+    function onChangeExtendHandler (e: React.ChangeEvent<HTMLElement>) {
+        setExtend(e.target.value)
+    }
+    
+    return (
+        <>
+        <h1>reserve page</h1>
+        <div>
 
-  return (
-<>
-<h1>homepage</h1>
+        <select name="" id="" onChange={onChangeHandler}>
+  <option value="mist">안갯빛</option>
+  <option value="lavender">라벤더</option>
+  <option value="gablet">하늘잔</option>
+  <option value="shirogane">시로가네</option>
+  <option value="empyreum">엔피레움</option>
+</select>
 
-{
-  coordinate.map((item, i) => (
-    <area key={i} target="" alt="" title="" href="" coords={item} shape="poly" />
-))
+<select name="" id="" onChange={onChangeExtendHandler}>
+    <option value="">비 확장구</option>
+    <option value="_sub">확장구</option>
+</select>
+        </div>
+
+{name && <Image src={`/images/streetMap/${name}${extend}.jpg`} usemap="#image-map" width={1000} height={850} />}
+        
+
+
+<map name="image-map" className={classes.imagemap}>
+<StreetAdress imagemap={DUMMY} />
+</map>
+<h3>{}</h3>
+        </>
+    )
 }
-</>
-  )
-}
+
