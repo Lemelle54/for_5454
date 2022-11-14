@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react"
-import ImageMap from 'image-map'
-import Image from "next/image"
-import classes from './index.module.css'
-import StreetAdress from "../../lib/streetCoordinate/coordinate"
+import React, { useEffect, useState } from "react";
+import ImageMap from "image-map";
+import Image from "next/image";
+import classes from "./index.module.css";
+import StreetAdress from "../../lib/streetCoordinate/coordinate";
+import Header from "../../layout/header/header";
 
 const DUMMY = `    <area target="" alt="" title="" href="" coords="247,157,323,225,321,154,252,223" shape="poly" />
 <area target="" alt="" title="" href="" coords="58,197,116,142,188,214,125,272" shape="poly" />
@@ -33,54 +34,56 @@ const DUMMY = `    <area target="" alt="" title="" href="" coords="247,157,323,2
 <area target="" alt="" title="" href="" coords="849,395,848,445,902,446,899,396" shape="poly" />
 <area target="" alt="" title="" href="" coords="873,465,871,516,925,516,925,463" shape="poly" />
 <area target="" alt="" title="" href="" coords="863,542,863,615,934,613,935,543" shape="poly" />
-<area target="" alt="" title="" href="" coords="721,651,785,614,819,676,758,713" shape="poly" />`
-
+<area target="" alt="" title="" href="" coords="721,651,785,614,819,676,758,713" shape="poly" />`;
 
 export default function reservePage() {
-    const [name, setName] = useState<string>('');
-    const [extend, setExtend] = useState<string>('');
-    useEffect(() => {
-ImageMap('img[usemap]')
-    }, [])
+  const [name, setName] = useState<string>("mist");
+  const [extend, setExtend] = useState<string>("");
+  useEffect(() => {
+    ImageMap("img[usemap]");
+  }, []);
 
-    function onChangeHandler (e: React.ChangeEvent<HTMLElement>) {
-        console.log(e.target.value)
-        setName(e.target.value)
-    }
+  function onChangeHandler(e: React.ChangeEvent<HTMLElement>) {
+    setName(e.target.value);
+  }
 
-    // 확장 비확장
-    function onChangeExtendHandler (e: React.ChangeEvent<HTMLElement>) {
-        setExtend(e.target.value)
-    }
-    
-    return (
-        <>
-        <h1>reserve page</h1>
-        <div>
+  // 확장 비확장
+  function onChangeExtendHandler(e: React.ChangeEvent<HTMLElement>) {
+    setExtend(e.target.value);
+  }
 
+  return (
+    <div className="container mx-auto">
+      <h2>reserve page</h2>
+      <div>
         <select name="" id="" onChange={onChangeHandler}>
-  <option value="mist">안갯빛</option>
-  <option value="lavender">라벤더</option>
-  <option value="gablet">하늘잔</option>
-  <option value="shirogane">시로가네</option>
-  <option value="empyreum">엔피레움</option>
-</select>
+          <option value="mist" selected>
+            안갯빛
+          </option>
+          <option value="lavender">라벤더</option>
+          <option value="gablet">하늘잔</option>
+          <option value="shirogane">시로가네</option>
+          <option value="empyreum">엔피레움</option>
+        </select>
 
-<select name="" id="" onChange={onChangeExtendHandler}>
-    <option value="">비 확장구</option>
-    <option value="_sub">확장구</option>
-</select>
-        </div>
+        <select name="" id="" onChange={onChangeExtendHandler}>
+          <option value="">비 확장구</option>
+          <option value="_sub">확장구</option>
+        </select>
+      </div>
 
-{name && <Image src={`/images/streetMap/${name}${extend}.jpg`} usemap="#image-map" width={1000} height={850} />}
-        
+      {name && (
+        <Image
+          src={`/images/streetMap/${name}${extend}.jpg`}
+          usemap="#image-map"
+          width={1000}
+          height={850}
+        />
+      )}
 
-
-<map name="image-map" className={classes.imagemap}>
-<StreetAdress imagemap={DUMMY} />
-</map>
-<h3>{}</h3>
-        </>
-    )
+      <map name="image-map" className={classes.imagemap}>
+        <StreetAdress imagemap={DUMMY} />
+      </map>
+    </div>
+  );
 }
-
