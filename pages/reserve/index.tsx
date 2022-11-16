@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import ImageMap from "image-map";
 import Image from "next/image";
 import classes from "./index.module.css";
 import StreetAdress from "../../lib/streetCoordinate/coordinate";
-import Header from "../../layout/header/header";
+import { Menu, Transition } from "@headlessui/react";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import SelectBox from "../../components/selectBox/selectBox";
 
 const DUMMY = `    <area target="" alt="" title="" href="" coords="247,157,323,225,321,154,252,223" shape="poly" />
 <area target="" alt="" title="" href="" coords="58,197,116,142,188,214,125,272" shape="poly" />
@@ -36,6 +38,10 @@ const DUMMY = `    <area target="" alt="" title="" href="" coords="247,157,323,2
 <area target="" alt="" title="" href="" coords="863,542,863,615,934,613,935,543" shape="poly" />
 <area target="" alt="" title="" href="" coords="721,651,785,614,819,676,758,713" shape="poly" />`;
 
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
+
 export default function reservePage() {
   const [name, setName] = useState<string>("mist");
   const [extend, setExtend] = useState<string>("");
@@ -53,37 +59,33 @@ export default function reservePage() {
   }
 
   return (
-    <div className="container mx-auto">
-      <h2>reserve page</h2>
-      <div>
-        <select name="" id="" onChange={onChangeHandler}>
-          <option value="mist" selected>
-            안갯빛
-          </option>
-          <option value="lavender">라벤더</option>
-          <option value="gablet">하늘잔</option>
-          <option value="shirogane">시로가네</option>
-          <option value="empyreum">엔피레움</option>
-        </select>
+    <>
+      <div className="container mx-auto">
+        <div className="mx-auto max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+            예약
+          </h1>
+        </div>
+        <div className="my-6">
+          <SelectBox setName={setName} extend={extend} setExtend={setExtend} />
+        </div>
 
-        <select name="" id="" onChange={onChangeExtendHandler}>
-          <option value="">비 확장구</option>
-          <option value="_sub">확장구</option>
-        </select>
+        <div className="flex justify-center">
+          {name && (
+            <Image
+              src={`/images/streetMap/${name}${extend}.jpg`}
+              usemap="#image-map"
+              width={1000}
+              height={850}
+              alt={`${name} village image`}
+            />
+          )}
+
+          <map name="image-map" className={classes.imagemap}>
+            <StreetAdress imagemap={DUMMY} />
+          </map>
+        </div>
       </div>
-
-      {name && (
-        <Image
-          src={`/images/streetMap/${name}${extend}.jpg`}
-          usemap="#image-map"
-          width={1000}
-          height={850}
-        />
-      )}
-
-      <map name="image-map" className={classes.imagemap}>
-        <StreetAdress imagemap={DUMMY} />
-      </map>
-    </div>
+    </>
   );
 }
